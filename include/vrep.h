@@ -1,6 +1,7 @@
 #ifndef ROBAL_VREP_H
 #define ROBAL_VREP_H
 
+#include <robal/robal.h>
 #include <stdint.h>
 
 /* Initialization of vrep communication module. Has to be called before any other action
@@ -8,6 +9,8 @@
 void robal_vrep_init(void);
 
 void robal_vrep_starter_wait_until_is_removed(void);
+
+robal_starting_color_t robal_vrep_starting_color_get(void);
 
 /* Get the position of virtual robot's motors
  * Argument:

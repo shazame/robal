@@ -1,4 +1,4 @@
-#include <cocobot/encoders.h>
+#include <robal/real.h>
 #include <platform.h>
 
 static int32_t _enc_value[2];
@@ -9,6 +9,18 @@ void robal_real_starter_wait_until_is_removed(void)
   while(!platform_gpio_get(PLATFORM_GPIO_STARTER))
   {
     vTaskDelay(50 / portTICK_PERIOD_MS);
+  }
+}
+
+robal_starting_color_t robal_real_starting_color_get(void)
+{
+  if(platform_gpio_get(PLATFORM_GPIO_COLOR))
+  {
+    return ROBAL_STARTING_COLOR_POS;
+  }
+  else
+  {
+    return ROBAL_STARTING_COLOR_NEG;
   }
 }
 

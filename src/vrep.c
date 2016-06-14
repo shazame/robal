@@ -7,6 +7,8 @@
 #include "extApi.h"
 #include "generated/autoconf.h"
 
+#include <time.h> //for random seed
+
 #define WHEEL_RADIUS_IN_METER (0.0325)
 
 #define VREPPOS2M(pos)     (pos * WHEEL_RADIUS_IN_METER)
@@ -132,6 +134,13 @@ void robal_vrep_starter_wait_until_is_removed(void)
 {
   //no starter on simu. Just wait 3s
   vTaskDelay(3000 / portTICK_PERIOD_MS);
+}
+
+robal_starting_color_t robal_vrep_starting_color_get(void)
+{
+  //random color in simu
+  srand(time(NULL));
+  return rand() % 2;
 }
 
 void robal_vrep_motor_get_position(int32_t motor_position[2])

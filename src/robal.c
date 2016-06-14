@@ -32,6 +32,15 @@ void robal_starter_wait_until_is_removed(void)
 #endif
 }
 
+robal_starting_color_t robal_starting_color_get(void)
+{
+#ifdef AUSBEE_SIM
+  return robal_vrep_starting_color_get();
+#else
+  return robal_real_starting_color_get();
+#endif
+}
+
 void robal_motor_get_position(int32_t motor_position[2])
 {
 #ifdef AUSBEE_SIM
