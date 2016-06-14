@@ -4,6 +4,14 @@
 static int32_t _enc_value[2];
 static uint16_t _enc_last_angle[2];
 
+void robal_real_starter_wait_until_is_removed(void)
+{
+  while(!platform_gpio_get(PLATFORM_GPIO_STARTER))
+  {
+    vTaskDelay(50 / portTICK_PERIOD_MS);
+  }
+}
+
 static void robal_real_encoders_update(int id)
 {
   uint16_t raw;

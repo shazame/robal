@@ -128,6 +128,12 @@ void robal_vrep_init(void)
   }
 }
 
+void robal_vrep_starter_wait_until_is_removed(void)
+{
+  //no starter on simu. Just wait 3s
+  vTaskDelay(3000 / portTICK_PERIOD_MS);
+}
+
 void robal_vrep_motor_get_position(int32_t motor_position[2])
 {
   robal_from_vrep_t buffer_from_vrep_sync;

@@ -3,6 +3,8 @@
 
 #include <stdint.h>
 
+void robal_real_starter_wait_until_is_removed(void);
+
 /* Get the position of robot's motors
  * Argument:
  *  - motor_position: pointer to store motor position, where

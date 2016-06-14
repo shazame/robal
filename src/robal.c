@@ -23,6 +23,15 @@ void robal_init(void)
 
 }
 
+void robal_starter_wait_until_is_removed(void)
+{
+#ifdef AUSBEE_SIM
+  robal_vrep_starter_wait_until_is_removed();
+#else
+  robal_real_starter_wait_until_is_removed();
+#endif
+}
+
 void robal_motor_get_position(int32_t motor_position[2])
 {
 #ifdef AUSBEE_SIM

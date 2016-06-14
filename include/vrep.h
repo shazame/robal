@@ -7,6 +7,8 @@
  */
 void robal_vrep_init(void);
 
+void robal_vrep_starter_wait_until_is_removed(void);
+
 /* Get the position of virtual robot's motors
  * Argument:
  *  - motor_position: pointer to store motor position, where
