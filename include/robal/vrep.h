@@ -1,7 +1,7 @@
 #ifndef ROBAL_VREP_H
 #define ROBAL_VREP_H
 
-#include <robal/robal.h>
+#include <robal.h>
 #include <stdint.h>
 
 /* Initialization of vrep communication module. Has to be called before any other action

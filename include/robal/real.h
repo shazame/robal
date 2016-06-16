@@ -1,6 +1,7 @@
 #ifndef ROBAL_REAL_H
 #define ROBAL_REAL_H
 
+#include <robal.h>
 #include <stdint.h>
 
 void robal_real_starter_wait_until_is_removed(void);
