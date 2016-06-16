@@ -1,6 +1,8 @@
 #ifndef ROBAL_H
 #define ROBAL_H
 
+#include <stdint.h>
+
 typedef enum
 {
   ROBAL_STARTING_COLOR_NEG,
