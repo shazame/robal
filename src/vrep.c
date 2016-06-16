@@ -7,6 +7,9 @@
 #include "extApi.h"
 #include "generated/autoconf.h"
 
+#include <FreeRTOS.h>
+#include <task.h>
+
 #include <time.h> //for random seed
 
 #define WHEEL_RADIUS_IN_METER (0.0325)

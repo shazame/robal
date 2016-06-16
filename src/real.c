@@ -1,5 +1,7 @@
 #include <robal/real.h>
 #include <platform.h>
+#include <FreeRTOS.h>
+#include <task.h>
 
 static int32_t _enc_value[2];
 static uint16_t _enc_last_angle[2];
