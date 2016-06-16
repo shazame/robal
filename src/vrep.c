@@ -53,20 +53,20 @@ static void * robal_vrep_task(void * args)
   robal_from_vrep_t buffer_from_vrep_unsync;
   buffer_from_vrep_unsync.initialized = 1;
 
-  ret = simxGetObjectHandle(clientID, "robalLeftMotor", &left_motor_handle, simx_opmode_oneshot_wait);
+  ret = simxGetObjectHandle(clientID, "cocobotLeftMotor", &left_motor_handle, simx_opmode_oneshot_wait);
   if (ret != 0)
   {
-    printf("Error %d during remote function call. Could not get object robalLeftMotor\n", ret);
+    printf("Error %d during remote function call. Could not get object cocobotLeftMotor\n", ret);
   }
   else
   {
     simxGetJointPosition(clientID, left_motor_handle, &buffer_from_vrep_unsync.left_motor_position, simx_opmode_streaming);
   }
 
-  ret = simxGetObjectHandle(clientID, "robalRightMotor", &right_motor_handle, simx_opmode_oneshot_wait);
+  ret = simxGetObjectHandle(clientID, "cocobotRightMotor", &right_motor_handle, simx_opmode_oneshot_wait);
   if (ret != 0)
   {
-    printf("Error %d during remote function call. Could not get object robalRightMotor\n", ret);
+    printf("Error %d during remote function call. Could not get object cocobotRightMotor\n", ret);
   }
   else
   {
@@ -113,15 +113,15 @@ void robal_vrep_init(void)
   {
     printf("Connected to VREP remote API server with client ID: %d\n", clientID);
 
-    ret = simxLoadModel(clientID, "robal.ttm", 1, &robot_handle, simx_opmode_oneshot_wait);
+    ret = simxLoadModel(clientID, "cocobot.ttm", 1, &robot_handle, simx_opmode_oneshot_wait);
     if (ret != 0)
     {
-      printf("Error %d during remote function call. Could not get model object robal.ttm\n", ret);
+      printf("Error %d during remote function call. Could not get model object cocobot.ttm\n", ret);
     }
   }
   else
   {
-    printf("robal_position_init: Failed connecting to VREP remote API server with port %d\n", vrep_server_port);
+    printf("robal_vrep_init: Failed connecting to VREP remote API server with port %d\n", vrep_server_port);
     exit(EXIT_FAILURE);
   }
 
