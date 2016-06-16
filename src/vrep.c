@@ -41,6 +41,9 @@ static pthread_mutex_t lock;
 static int clientID = -1;
 static int robot_handle = -1;
 
+static int fake_vrep = 0;
+static int32_t sim_motor_position[2] = {0, 0};
+
 static void * robal_vrep_task(void * args)
 {
   (void)args;
@@ -95,6 +98,19 @@ static void * robal_vrep_task(void * args)
 
 void robal_vrep_init(void)
 {
+  char * fvrep = getenv("FAKE_VREP");
+  if(fvrep != NULL)
+  {
+    if(strcmp(getenv("FAKE_VREP"), "1") == 0)
+    {
+      fake_vrep = 1;
+    }
+  }
+  if(fake_vrep)
+  {
+    return;
+  }
+
   buffer_from_vrep.initialized = 0;
   buffer_to_vrep.initialized = 0;
 
@@ -148,35 +164,51 @@ robal_starting_color_t robal_vrep_starting_color_get(void)
 
 void robal_vrep_motor_get_position(int32_t motor_position[2])
 {
-  robal_from_vrep_t buffer_from_vrep_sync;
-
-  pthread_mutex_lock(&lock);
-  memcpy(&buffer_from_vrep_sync, &buffer_from_vrep, sizeof(robal_from_vrep_t));
-  pthread_mutex_unlock(&lock);
-
-  if(buffer_from_vrep_sync.initialized)
+  if(fake_vrep)
   {
-    motor_position[0] = (int32_t)VREPPOS2TICK(buffer_from_vrep_sync.right_motor_position);
-    motor_position[1] = (int32_t)VREPPOS2TICK(buffer_from_vrep_sync.left_motor_position);
+    motor_position[0] = sim_motor_position[0];
+    motor_position[1] = sim_motor_position[1];
+  }
+  else
+  {
+    robal_from_vrep_t buffer_from_vrep_sync;
+
+    pthread_mutex_lock(&lock);
+    memcpy(&buffer_from_vrep_sync, &buffer_from_vrep, sizeof(robal_from_vrep_t));
+    pthread_mutex_unlock(&lock);
+
+    if(buffer_from_vrep_sync.initialized)
+    {
+      motor_position[0] = (int32_t)VREPPOS2TICK(buffer_from_vrep_sync.right_motor_position);
+      motor_position[1] = (int32_t)VREPPOS2TICK(buffer_from_vrep_sync.left_motor_position);
+    }
   }
 }
 
 void robal_vrep_motor_set_command(float left_motor_speed, float right_motor_speed)
 {
-  robal_to_vrep_t buffer_to_vrep_unsync;
+  if(fake_vrep)
+  {
+    sim_motor_position[0] += right_motor_speed / 100.0f;
+    sim_motor_position[1] += left_motor_speed / 100.0f;
+  }
+  else
+  {
+    robal_to_vrep_t buffer_to_vrep_unsync;
 
-  buffer_to_vrep_unsync.initialized = 1;
+    buffer_to_vrep_unsync.initialized = 1;
 
-  // Converting pwm on 16 bits to vrep motor speed
-  left_motor_speed  = MAX_SPEED_IN_RAD_PER_S * left_motor_speed  / 0xffff;
-  right_motor_speed = MAX_SPEED_IN_RAD_PER_S * right_motor_speed / 0xffff;
+    // Converting pwm on 16 bits to vrep motor speed
+    left_motor_speed  = MAX_SPEED_IN_RAD_PER_S * left_motor_speed  / 0xffff;
+    right_motor_speed = MAX_SPEED_IN_RAD_PER_S * right_motor_speed / 0xffff;
 
-  buffer_to_vrep_unsync.left_motor_speed = left_motor_speed;
-  buffer_to_vrep_unsync.right_motor_speed = right_motor_speed;
+    buffer_to_vrep_unsync.left_motor_speed = left_motor_speed;
+    buffer_to_vrep_unsync.right_motor_speed = right_motor_speed;
 
-  pthread_mutex_lock(&lock);
-  memcpy(&buffer_to_vrep, &buffer_to_vrep_unsync, sizeof(robal_to_vrep_t));
-  pthread_mutex_unlock(&lock);
+    pthread_mutex_lock(&lock);
+    memcpy(&buffer_to_vrep, &buffer_to_vrep_unsync, sizeof(robal_to_vrep_t));
+    pthread_mutex_unlock(&lock);
+  }
 }
 
 void robal_vrep_position_set_x(float x)
