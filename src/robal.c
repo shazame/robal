@@ -1,4 +1,9 @@
 #include <robal.h>
+#ifdef AUSBEE_SIM
+#include <vrep.h>
+#else
+#include <real.h>
+#endif
 
 #ifdef AUSBEE_SIM
 static int fake_vrep = 0;
