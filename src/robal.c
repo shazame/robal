@@ -1,5 +1,6 @@
 #include <robal.h>
 #ifdef AUSBEE_SIM
+#include <stdlib.h>
 #include <robal/vrep.h>
 #else
 #include <robal/real.h>
